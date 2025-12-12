@@ -20,8 +20,19 @@ function initFirebase() {
     credential: admin.credential.cert(serviceAccount),
   });
 }
+// In api/weather.js
 
 export default async function handler(req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Handle CORS preflight (IMPORTANT)
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  // ---------------------
   try {
     initFirebase();
   } catch (err) {
