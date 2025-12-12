@@ -43,7 +43,7 @@
     async function getWeather() {
       try {
         // Always use your ESP32 server IP
-        const baseURL = "http://192.168.43.74:3000";
+        const baseURL = "https://esp32-weather-station.vercel.app";
         const url = `${baseURL}/api/weather`;
         console.log("Fetching from:", url);
 
