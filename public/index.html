@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESP32 Weather Station</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 { color: #333; }
+    .card {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    .value {
+      font-size: 2rem;
+      color: #0078d7;
+    }
+  </style>
+</head>
+<body>
+  <h3>Developed By Adel GANA</h3>
+  <h1>🌤️ ESP32 Weather Station</h1>
+  <div class="card">
+    <p>Temperature: <span id="temp" class="value">--</span> °C</p>
+    <p>Humidity: <span id="hum" class="value">--</span> %</p>
+    <p><small>Last update: <span id="time">--</span></small></p>
+  </div>
+
+  <script>
+    async function getWeather() {
+      try {
+        // Always use your ESP32 server IP
+        const baseURL = "http://192.168.43.74:3000";
+        const url = `${baseURL}/api/weather`;
+        console.log("Fetching from:", url);
+
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        const data = await res.json();
+        if (!Array.isArray(data) || data.length === 0) throw new Error("No data");
+
+        const latest = data[0];
+        document.getElementById("temp").textContent = latest.temperature.toFixed(1);
+        document.getElementById("hum").textContent = latest.humidity.toFixed(1);
+        document.getElementById("time").textContent = new Date(latest.timestamp).toLocaleString();
+      } catch (err) {
+        console.error("Error fetching weather:", err);
+      }
+    }
+
+    getWeather();
+    setInterval(getWeather, 5000);
+  </script>
+</body>
+</html>

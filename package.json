@@ -1,0 +1,14 @@
+{
+  "name": "firebase-node",
+  "version": "1.0.0",
+    "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+    },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "firebase-admin": "^13.6.0"
+  }
+}
