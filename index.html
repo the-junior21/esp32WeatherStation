@@ -23,29 +23,34 @@
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       text-align: center;
+      min-width: 280px;
     }
     .value {
       font-size: 2rem;
       color: #0078d7;
+    }
+    .rain {
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <h3>Developed By G team</h3>
   <h1>🌤️ ESP32 Weather Station</h1>
+
   <div class="card">
     <p>Temperature: <span id="temp" class="value">--</span> °C</p>
     <p>Humidity: <span id="hum" class="value">--</span> %</p>
+    <p>Pressure: <span id="pres" class="value">--</span> Pa</p>
+    <p>Rain Status: <span id="rain" class="rain">--</span></p>
     <p><small>Last update: <span id="time">--</span></small></p>
   </div>
 
   <script>
     async function getWeather() {
       try {
-        // Always use your ESP32 server IP
         const baseURL = "https://esp32-weather-station.vercel.app";
         const url = `${baseURL}/api/weather`;
-        console.log("Fetching from:", url);
 
         const res = await fetch(url);
         if (!res.ok) throw new Error("HTTP " + res.status);
@@ -54,9 +59,21 @@
         if (!Array.isArray(data) || data.length === 0) throw new Error("No data");
 
         const latest = data[0];
-        document.getElementById("temp").textContent = latest.temperature.toFixed(1);
-        document.getElementById("hum").textContent = latest.humidity.toFixed(1);
-        document.getElementById("time").textContent = new Date(latest.timestamp).toLocaleString();
+
+        document.getElementById("temp").textContent =
+          latest.temperature.toFixed(1);
+
+        document.getElementById("hum").textContent =
+          latest.humidity.toFixed(1);
+
+        document.getElementById("pres").textContent =
+          Math.round(latest.pressure);
+
+        document.getElementById("rain").textContent =
+          latest.rain ? "🌧️ RAIN" : "☀️ NO RAIN";
+
+        document.getElementById("time").textContent =
+          new Date(latest.timestamp).toLocaleString();
       } catch (err) {
         console.error("Error fetching weather:", err);
       }
