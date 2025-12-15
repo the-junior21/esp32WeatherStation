@@ -72,8 +72,9 @@
         document.getElementById("rain").textContent =
           latest.rain ? "🌧️ RAIN" : "☀️ NO RAIN";
 
-        document.getElementById("time").textContent =
-          new Date(latest.timestamp).toLocaleString();
+        document.getElementById("time").textContent =latest.timestamp
+    ? new Date(latest.timestamp.seconds * 1000).toLocaleString()
+    : "--";
       } catch (err) {
         console.error("Error fetching weather:", err);
       }
